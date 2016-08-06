@@ -18,6 +18,11 @@ Run project
 ## Production
 `npm run build`
 
+## Contribute
+
+In order to contribute a patch (feature, bugfix, whatever), we are using a git-flow-like approach: just fork the repo, create a feature or a bugfix branch and then send us a merge request ;)
+
+But firstly remember that you have to read the CONTRIBUTORS file, sign our CLA and add your name to that file.
 
 ## Questions?
 Check out the [FAQ](/docs/FAQ.md)
