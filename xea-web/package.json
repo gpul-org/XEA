@@ -26,7 +26,7 @@
     "open:cover": "npm run test:cover && open coverage/index.html"
   },
   "author": "GPUL",
-  "license": "AGPL",
+  "license": "AGPLv3",
   "dependencies": {
     "bootstrap": "3.3.7",
     "object-assign": "4.1.0",

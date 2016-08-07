@@ -29,4 +29,3 @@ Usage with Docker
 
 ~ To be filled (but it's probably a good idea to have a
 docker-compose.yml at some point) ~
-
