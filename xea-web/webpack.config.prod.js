@@ -1,15 +1,15 @@
 // For info about this file refer to webpack and webpack-hot-middleware documentation
 // For info on how we're generating bundles with hashed filenames for cache busting: https://medium.com/@okonetchnikov/long-term-caching-of-static-assets-with-webpack-1ecb139adb95#.w99i89nsz
-import webpack from 'webpack';
-import path from 'path';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import WebpackMd5Hash from 'webpack-md5-hash';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack'
+import path from 'path'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import WebpackMd5Hash from 'webpack-md5-hash'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const GLOBALS = {
   'process.env.NODE_ENV': JSON.stringify('production'),
   __DEV__: false
-};
+}
 
 export default {
   debug: true,
@@ -65,16 +65,17 @@ export default {
   module: {
     loaders: [
       {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
+      {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
       {test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
-      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff"},
+      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'},
       {test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=application/octet-stream'},
       {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=image/svg+xml'},
       {test: /\.(jpe?g|png|gif)$/i, loaders: ['file']},
       {test: /\.ico$/, loader: 'file-loader?name=[name].[ext]'},
-      {
-        test: /(\.css|\.scss)$/,
-        loader: ExtractTextPlugin.extract('css?sourceMap!sass?sourceMap')
-      }
+      {test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!sass?sourceMap')}
     ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.json', '.jsx', '.webpack.js', '.web.js']
   }
-};
+}
