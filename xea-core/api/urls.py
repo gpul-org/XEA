@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+from .views import RegisterUserView
 
 urlpatterns = [
-        ## We don't yet have any routes
+    url(r'^reg$', RegisterUserView.as_view(), name='registration'),
 ]
