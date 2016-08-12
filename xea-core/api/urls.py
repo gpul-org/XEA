@@ -17,5 +17,5 @@ from django.conf.urls import url
 from .views import RegisterUserView
 
 urlpatterns = [
-    url(r'^reg$', RegisterUserView.as_view(), name='registration'),
+    url(r'^signup$', RegisterUserView.as_view(), name='registration'),
 ]

@@ -5,12 +5,13 @@ from rest_framework import status
 
 
 class RegistrationTest(APITestCase):
-    username = 'prova1'
+
+    username = 'prova'
     first_name = 'Prova'
     last_name = 'Prova'
     email = 'prova@prova.prova'
     password = 'usuario123'
-    test_logout_all_client_number = 3
+    payload = dict(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
 
     # Urls we are working with
     registration_url = reverse('registration')
@@ -20,18 +21,13 @@ class RegistrationTest(APITestCase):
         In this test we verify that a client can register a new user by sending a POST to the registration endpoint
         :return:
         """
-        '''
-        payload = '"username": "{username}", "password": "{password}, "email": "{email}", ' \
-                  '"first_name": "{first_name}", "last_name": "{last_name}"'.format(username=self.username,
-                                                                                    password=self.password,
-                                                                                    email=self.email,
-                                                                                    first_name=self.first_name,
-                                                                                    last_name=self.last_name
-                                                                                    )
-        '''
+
+        response = self.client.post(self.registration_url, self.payload)
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+        queryset = User.objects.all()
+        self.assertTrue(queryset.filter(username='prova').exists())
+
+'''
         payload = {'username': 'prova', 'password': 'usuario123', 'email': 'prova@prova.prova',
                    'first_name': 'Prova', 'last_name': 'Prova'}
-
-        response = self.client.post(self.registration_url, payload)
-        queryset = User.objects.all()
-        #assert('prova' in queryset)
+'''
