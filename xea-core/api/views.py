@@ -20,7 +20,10 @@ class ActivateUserView(APIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = serializers.UserSerializer
 
-    @detail_route(methods=['get'])
+    def get(self, request, pk=None):
+        return self.activate_user(request,pk)
+
+    @detail_route(methods=['get']) # Is this useful at all?
     def activate_user(self, request, pk):
         if not pk:
             return Response(None, status=status.HTTP_403_FORBIDDEN)
