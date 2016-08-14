@@ -15,19 +15,38 @@ class RegistrationTest(APITestCase):
 
     # Urls we are working with
     registration_url = reverse('registration')
+    activation_url = reverse('activation')
+
 
     def test_register_user(self):
         """
         In this test we verify that a client can register a new user by sending a POST to the registration endpoint
+        The new User entity will have the "is_active" flag set to False
         :return:
         """
-
         response = self.client.post(self.registration_url, self.payload)
         self.assertEquals(response.status_code, status.HTTP_201_CREATED)
-        queryset = User.objects.all()
-        self.assertTrue(queryset.filter(username='prova').exists())
+        queryset = User.objects.all().filter(username='prova')
+        self.assertTrue(queryset.exists())
+        newuser = queryset[0]
+        self.assertFalse(newuser.is_active)
 
-'''
-        payload = {'username': 'prova', 'password': 'usuario123', 'email': 'prova@prova.prova',
-                   'first_name': 'Prova', 'last_name': 'Prova'}
-'''
+
+
+    def test_activate_user(self):
+        response1 = self.client.post(self.registration_url, self.payload)
+        self.assertEquals(response1.status_code, status.HTTP_201_CREATED)
+        id = response1.data['id']
+        detail_url = '{prefix}{userpk}'.format(prefix=self.activation_url, userpk=id)
+        response2 = self.client.get(detail_url)
+        self.assertEquals(response2.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_reusing_activation_link(self):
+        response1 = self.client.post(self.registration_url, self.payload)
+        self.assertEquals(response1.status_code, status.HTTP_201_CREATED)
+        id = response1.data['id']
+        detail_url = '{prefix}{userpk}'.format(prefix=self.activation_url, userpk=id)
+        response2 = self.client.get(detail_url)
+        self.assertEquals(response2.status_code, status.HTTP_204_NO_CONTENT)
+        response3 = self.client.get(detail_url)
+        self.assertEquals(response3.status_code, status.HTTP_403_FORBIDDEN)
