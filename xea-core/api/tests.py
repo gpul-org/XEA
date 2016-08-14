@@ -31,8 +31,6 @@ class RegistrationTest(APITestCase):
         newuser = queryset[0]
         self.assertFalse(newuser.is_active)
 
-
-
     def test_activate_user(self):
         response1 = self.client.post(self.registration_url, self.payload)
         self.assertEquals(response1.status_code, status.HTTP_201_CREATED)
