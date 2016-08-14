@@ -27,7 +27,10 @@ class ActivateUserView(APIView):
     def activate_user(self, request, pk):
         if not pk:
             return Response({'msg': 'You cannot access this page'}, status=status.HTTP_403_FORBIDDEN)
-        user = get_user_model().objects.get(pk=pk)
+        try:
+            user = get_user_model().objects.get(pk=pk)
+        except get_user_model().DoesNotExist:
+            return Response({'msg': 'You cannot access this page'}, status=status.HTTP_403_FORBIDDEN)
         if user.is_active:
             return Response({'msg': 'This user is already activated'}, status=status.HTTP_403_FORBIDDEN)
         user.is_active = True

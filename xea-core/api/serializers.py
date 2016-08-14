@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from validate_email_address import validate_email
 from .utils import MailFactory
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,10 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def create(self, validated_data):
-        try:
-            validate_email(validated_data['email'])
-        except serializers.ValidationError:
-            pass
         user = get_user_model().objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
