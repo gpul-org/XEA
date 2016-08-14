@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'jwt_knox',
-    'api',
+    'api'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -64,7 +64,7 @@ ROOT_URLCONF = 'xea_core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./xea-core/api/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,3 +140,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Email settings
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'smempleadox@gmail.com'
+EMAIL_HOST_PASSWORD = 'usuario123'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+#OUR SITE's HOST
+SITE_HOST = 'http://127.0.0.1:8000'
