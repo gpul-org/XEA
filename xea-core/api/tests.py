@@ -36,6 +36,7 @@ class RegistrationTest(APITestCase):
         self.assertEquals(response1.status_code, status.HTTP_201_CREATED)
         id = response1.data['id']
         detail_url = '{prefix}{userpk}'.format(prefix=self.activation_url, userpk=id)
+        print(detail_url)
         response2 = self.client.get(detail_url)
         self.assertEquals(response2.status_code, status.HTTP_204_NO_CONTENT)
 
