@@ -26,12 +26,12 @@ class ActivateUserView(APIView):
     @detail_route(methods=['get']) # Is this useful at all?
     def activate_user(self, request, pk):
         if not pk:
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
+            return Response({'msg': 'You cannot access this page'}, status=status.HTTP_403_FORBIDDEN)
         user = get_user_model().objects.get(pk=pk)
         if user.is_active:
-            return Response(None, status=status.HTTP_403_FORBIDDEN)
+            return Response({'msg': 'This user is already activated'}, status=status.HTTP_403_FORBIDDEN)
         user.is_active = True
         user.save()
-        return Response(None, status=status.HTTP_204_NO_CONTENT)
+        return Response({'msg': 'The account had been activated correctly'}, status=status.HTTP_204_NO_CONTENT)
 
 

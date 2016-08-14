@@ -18,6 +18,6 @@ from .views import RegisterUserView, ActivateUserView
 
 urlpatterns = [
     url(r'^signup$', RegisterUserView.as_view(), name='registration'),
-    url(r'^activation/',ActivateUserView.as_view(), name='activation'),
-    url(r'^activation/pk=(?P<pk>[0-9]+)',ActivateUserView.as_view())
+    url(r'^activation/(?P<pk>[0-9]+)$',ActivateUserView.as_view()),
+    url(r'^activation/$',ActivateUserView.as_view(), name='activation')
 ]
