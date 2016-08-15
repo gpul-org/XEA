@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
 import MainToolBar from './common/MainToolBar'
 
-const App = (props) => {
+function App (props) {
   return (
-    <div className='container'>
+    <div className="container">
       <MainToolBar />
       {props.children}
     </div>

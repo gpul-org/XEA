@@ -14,7 +14,8 @@ export default {
   ],
   target: 'web', // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
   output: {
-    path: `${__dirname}/src`, // Note: Physical files are only output by the production build task `npm run build`.
+    // Note: Physical files are only output by the production build task `npm run build`.
+    path: `${__dirname}/src`,
     filename: 'bundle.js'
   },
   plugins: [
@@ -35,15 +36,18 @@ export default {
   ],
   module: {
     loaders: [
-      {test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel']},
-      {test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader'},
-      {test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file'},
-      {test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff'},
-      {test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=application/octet-stream'},
-      {test: /\.svg(\?v=\d+.\d+.\d+)?$/, loader: 'file-loader?limit=10000&mimetype=image/svg+xml'},
-      {test: /\.(jpe?g|png|gif)$/i, loaders: ['file']},
-      {test: /\.ico$/, loader: 'file-loader?name=[name].[ext]'},
-      {test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap']}
+      { test: /\.js$/, include: path.join(__dirname, 'src'), loaders: ['babel'] },
+      { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'file' },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.ttf(\?v=\d+.\d+.\d+)?$/,
+        loader: 'file-loader?limit=10000&mimetype=application/octet-stream' },
+      { test: /\.svg(\?v=\d+.\d+.\d+)?$/,
+        loader: 'file-loader?limit=10000&mimetype=image/svg+xml' },
+      { test: /\.(jpe?g|png|gif)$/i, loaders: ['file'] },
+      { test: /\.ico$/, loader: 'file-loader?name=[name].[ext]' },
+      { test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'sass?sourceMap'] }
     ]
   },
   resolve: {

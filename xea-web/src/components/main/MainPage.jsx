@@ -1,14 +1,14 @@
 import React from 'react'
 import SearchMenu from '../search/SearchMenu'
 
-const MainPage = () => {
+function MainPage () {
   return (
     <div>
-      <h2 className='text-center'>Welcome to Xea</h2>
-      <div className='row'>
+      <h2 className="text-center">Welcome to Xea</h2>
+      <div className="row">
         <SearchMenu />
       </div>
-      <p className='row text-center'>
+      <p className="row text-center">
         Here you could see a list with near events
       </p>
     </div>
