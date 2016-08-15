@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
-
+from django.contrib.auth.tokens import default_token_generator
 
 
 class MailFactory:
@@ -14,11 +14,9 @@ class MailFactory:
     host= settings.SITE_HOST
 
     @staticmethod
-    def send_activation_mail(to_email, id, username):
-        context = {'host': MailFactory.host, 'id': id, 'username': username, 'uri': reverse('activation')}
+    def send_activation_mail(to_email, uid, username, token):
+        context = {'host': MailFactory.host, 'uidb64': uid, 'token': token, 'username': username, 'uri': reverse('activation')}
         msg = MailFactory.default_msg.render(context)
+        print(msg)
         send_mail(MailFactory.default_subject, msg, MailFactory.from_email, [to_email], fail_silently=False)
-
-
-
 
