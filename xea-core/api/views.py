@@ -6,7 +6,8 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from . import serializers
-
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
 
 class RegisterUserView(CreateAPIView):
 
@@ -20,21 +21,32 @@ class ActivateUserView(APIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = serializers.UserSerializer
 
-    def get(self, request, pk=None):
-        return self.activate_user(request,pk)
+    def get(self, request, uidb64=None, token=None):
+        if uidb64 is None or token is None:
+            return Response({'msg': 'This activation link is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+        return self.activate_user(request,uidb64, token)
 
     @detail_route(methods=['get']) # Is this useful at all?
-    def activate_user(self, request, pk):
-        if not pk:
-            return Response({'msg': 'You cannot access this page'}, status=status.HTTP_403_FORBIDDEN)
+    def activate_user(self, request, uidb64, token):
+        uid = urlsafe_base64_decode(uidb64)
         try:
-            user = get_user_model().objects.get(pk=pk)
-        except get_user_model().DoesNotExist:
-            return Response({'msg': 'You cannot access this page'}, status=status.HTTP_403_FORBIDDEN)
-        if user.is_active:
-            return Response({'msg': 'This user is already activated'}, status=status.HTTP_403_FORBIDDEN)
-        user.is_active = True
-        user.save()
-        return Response({'msg': 'The account had been activated correctly'}, status=status.HTTP_204_NO_CONTENT)
+            user = get_user_model().objects.get(pk=uid)
+            if default_token_generator.check_token(user, token):
+                if not user.is_active:
+                    user.is_active = True
+                    user.save()
+                    return Response({'msg': 'The account had been activated correctly'},
+                                    status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response({},
+                                    status=status.HTTP_403_FORBIDDEN)
+
+            else:
+                return Response({},
+                    status=status.HTTP_403_FORBIDDEN)
+        except ValueError:
+            return Response({'msg': 'This activation link is not valid'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 
