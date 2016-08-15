@@ -1,4 +1,4 @@
-import {SEARCH_EVENTS} from '../constants/actionTypes'
+import { SEARCH_EVENTS } from '../constants/actionTypes'
 import initialState from './initialState'
 
 // IMPORTANT: Note that with Redux, state should NEVER be changed.

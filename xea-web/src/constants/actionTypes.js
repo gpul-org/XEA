@@ -1,1 +1,3 @@
-export const SEARCH_EVENTS = 'SEARCH_EVENTS'
+const SEARCH_EVENTS = 'SEARCH_EVENTS'
+
+export default SEARCH_EVENTS
