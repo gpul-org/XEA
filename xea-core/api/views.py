@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from . import serializers
 from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import default_token_generator
+from .utils import TokenUtils
 
 class RegisterUserView(CreateAPIView):
 
@@ -31,7 +31,7 @@ class ActivateUserView(APIView):
         uid = urlsafe_base64_decode(uidb64)
         try:
             user = get_user_model().objects.get(pk=uid)
-            if default_token_generator.check_token(user, token):
+            if TokenUtils.validate_token(user, token):
                 if not user.is_active:
                     user.is_active = True
                     user.save()
@@ -43,7 +43,7 @@ class ActivateUserView(APIView):
 
             else:
                 return Response({},
-                    status=status.HTTP_403_FORBIDDEN)
+                    status = status.HTTP_403_FORBIDDEN)
         except ValueError:
             return Response({'msg': 'This activation link is not valid'}, status=status.HTTP_400_BAD_REQUEST)
 

@@ -20,3 +20,14 @@ class MailFactory:
         print(msg)
         send_mail(MailFactory.default_subject, msg, MailFactory.from_email, [to_email], fail_silently=False)
 
+
+class TokenUtils:
+
+    @staticmethod
+    def get_token_for_link(self, user):
+        token =  default_token_generator.make_token(user)
+        return token
+    @staticmethod
+    def validate_token(self, user, token):
+        is_valid = default_token_generator.check_token(user,token)
+        return is_valid
