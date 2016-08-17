@@ -13,7 +13,7 @@ class LoginForm extends Component {
     super(props)
 
     this.getValidationState = this.getValidationState.bind(this)
-    this.renderReactBootstrapField = this.renderReactBootstrapField.bind(this)
+    this.renderField = this.renderField.bind(this)
   }
 
   getValidationState ({ active, pristine, error }) {
@@ -55,7 +55,7 @@ class LoginForm extends Component {
           name="email"
           label="Email"
           placeholder="example@email.com"
-          component={this.renderReactBootstrapField}
+          component={this.renderField}
           type="email"
           className="form-control"
         />
@@ -63,7 +63,7 @@ class LoginForm extends Component {
           name="password"
           label="Password"
           placeholder="Password"
-          component={this.renderReactBootstrapField}
+          component={this.renderField}
           type="password"
           className="form-control"
         />

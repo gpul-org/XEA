@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Modal } from 'react-bootstrap'
-import { loginRequest } from '../../actions/loginActions'
+import { loginRequest } from '../../actions/authActions'
 
 import LoginForm from './LoginForm'
 
