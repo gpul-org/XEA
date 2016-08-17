@@ -1,17 +1,17 @@
-from django.contrib.auth import get_user_model
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.decorators import detail_route
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from . import serializers
 from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth import get_user_model
+from . import serializers
 from .utils import TokenUtils
 
-class RegisterUserView(CreateAPIView):
 
-    model = get_user_model()  # We actually use the standard User model
+class RegisterUserView(CreateAPIView):
+    model = get_user_model()
     permission_classes = (permissions.AllowAny,)
     serializer_class = serializers.UserSerializer
 
@@ -24,9 +24,9 @@ class ActivateUserView(APIView):
     def get(self, request, uidb64=None, token=None):
         if uidb64 is None or token is None:
             return Response({'msg': 'This activation link is not valid'}, status=status.HTTP_400_BAD_REQUEST)
-        return self.activate_user(request,uidb64, token)
+        return self.activate_user(request, uidb64, token)
 
-    @detail_route(methods=['get']) # Is this useful at all?
+    @detail_route(methods=['get'])  # Is this useful at all?
     def activate_user(self, request, uidb64, token):
         uid = urlsafe_base64_decode(uidb64)
         try:
@@ -40,13 +40,8 @@ class ActivateUserView(APIView):
                 else:
                     return Response({},
                                     status=status.HTTP_403_FORBIDDEN)
-
             else:
                 return Response({},
-                    status = status.HTTP_403_FORBIDDEN)
-        except ValueError:
+                                status=status.HTTP_403_FORBIDDEN)
+        except get_user_model().DoesNotExist:
             return Response({'msg': 'This activation link is not valid'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
