@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 import { LOGIN_URL, VERIFY_URL, LOGOUT_URL, LOGOUT_ALL_URL } from '../constants/urls'
-import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_ERROR } from '../constants/actionTypes'
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGIN_ERROR,
+  LOGOUT_SUCCESS
+} from '../constants/actionTypes'
 
 export function loginRequest ({ username, password }) {
   console.log(`(login requested) username: ${username}, password: ${password}`)
@@ -15,18 +20,34 @@ export function loginRequest ({ username, password }) {
       },
       validStatus: () => true
     }
-    axios(LOGIN_URL, requestCfg)
-      .then(response => {
-        console.log('response:', response)
-        // TODO: Check status and dispatch appropriate action.
-      })
-      .catch(error => {
-        console.log(error)
-        dispatch({
-          type: LOGIN_ERROR,
-          payload: error
-        })
-      })
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: 'yesss!'
+    })
+    // axios(LOGIN_URL, requestCfg)
+    //   .then(response => {
+    //     console.log('response:', response)
+    //     // TODO: Check status and dispatch appropriate action.
+    //     if (response.status === 200) {
+    //       dispatch({
+    //         type: LOGIN_SUCCESS,
+    //         payload: response.data.token
+    //       })
+    //     } else {
+    //       dispatch({
+    //         type: LOGIN_FAILURE,
+    //         payload: response
+    //       })
+    //     }
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //     dispatch({
+    //       type: LOGIN_ERROR,
+    //       payload: error
+    //     })
+    //   })
 
     // // Basic authorization hash <- base64 username(=username):password
     // const hash = window.btoa(`${username}:${password}`)
@@ -70,6 +91,11 @@ export function loginRequest ({ username, password }) {
   }
 }
 
-export function logoutResquest () {
+export function logoutRequest () {
   console.log('logot requested')
+  return dispatch => {
+    dispatch({
+      type: LOGOUT_SUCCESS
+    })
+  }
 }

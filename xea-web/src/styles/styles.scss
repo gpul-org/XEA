@@ -27,6 +27,20 @@ h2 {
 	color: $vin-blue;
 }
 
+/*To show a button as a link in the manin tool bar (a navbar)*/
+.btn-as-navbar-link {
+
+    font-weight: inherit;
+}
+
+.btn-as-navbar-link:focus:active {
+  outline: none !important;
+}
+
+.btn-as-navbar-link:hover {
+  text-decoration: none;
+}
+
 .savings { color: $vin-green; }
 .loss { color: $vin-red; }
 input.small { width: 46px; }

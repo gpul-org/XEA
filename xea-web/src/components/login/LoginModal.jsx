@@ -42,11 +42,14 @@ class LoginModal extends Component {
     return (
       <ul className="nav navbar-nav navbar-right">
         <li>
-          <button className="btn btn-link navbar-btn" style={btnAsLinkStyle}onClick={this.open}>
+          <button
+            className="btn btn-link navbar-btn btn-as-navbar-link"
+            onClick={this.open}
+          >
             Log in
           </button>
         </li>
-        <Modal show={this.state.showModal} onHide={this.close} >
+        <Modal bsSize="small" show={this.state.showModal} onHide={this.close} >
           <Modal.Header closeButton>
             <Modal.Title>Log in</Modal.Title>
           </Modal.Header>
