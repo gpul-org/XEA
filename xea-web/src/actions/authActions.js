@@ -3,14 +3,14 @@ import axios from 'axios'
 import { LOGIN_URL, VERIFY_URL, LOGOUT_URL, LOGOUT_ALL_URL } from '../constants/urls'
 import { LOGIN_SUCCESS, LOGIN_FAILURE, LOGIN_ERROR } from '../constants/actionTypes'
 
-export function loginRequest ({ email, password }) {
-  console.log(`(login requested) email: ${email}, password: ${password}`)
+export function loginRequest ({ username, password }) {
+  console.log(`(login requested) username: ${username}, password: ${password}`)
   return dispatch => {
     const requestCfg = {
       method: 'post',
       timeout: 3000,
       auth: {
-        username: email,
+        username,
         password
       },
       validStatus: () => true
@@ -28,8 +28,8 @@ export function loginRequest ({ email, password }) {
         })
       })
 
-    // // Basic authorization hash <- base64 username(=email):password
-    // const hash = window.btoa(`${email}:${password}`)
+    // // Basic authorization hash <- base64 username(=username):password
+    // const hash = window.btoa(`${username}:${password}`)
     // // We need to build our headers
     // const headers = new window.Headers({
     //   Authorization: `Basic ${hash}`

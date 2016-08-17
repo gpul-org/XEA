@@ -2,12 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
-// TODO: must be defined and enforced.
-const passwordConfig = {
-  length: 6,
-  regex: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}')
-}
-
 class LoginForm extends Component {
   constructor (props) {
     super(props)
@@ -28,6 +22,15 @@ class LoginForm extends Component {
       return 'error'
     }
     return 'success'
+  }
+
+  usernameNormalicer (value, previousValue) {
+    // Prevent user form use whitespaces
+    if (/\s+/.test(value)) {
+      console.log('wtf:', value)
+      return previousValue
+    }
+    return value
   }
 
   renderField (
@@ -52,12 +55,13 @@ class LoginForm extends Component {
     return (
       <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
         <Field
-          name="email"
-          label="Email"
-          placeholder="example@email.com"
+          name="username"
+          label="User name"
+          placeholder="username"
           component={this.renderField}
-          type="email"
+          type="text"
           className="form-control"
+          normalize={this.usernameNormalicer}
         />
         <Field
           name="password"
@@ -101,19 +105,28 @@ LoginForm.propTypes = {
 //   return { errorMessage: state.Error.message }
 // }
 
-const validate = (values) => {
-  const errors = {}
-  const pc = passwordConfig
+// TODO: must be defined and enforced.
+const passwordConfig = {
+  length: 6,
+  regex: new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}')
+}
+const usernameConfig = {
+  length: 8
+}
 
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+const validate = ({ username, password }) => {
+  console.log(`username: ${username}, password: ${password}`)
+  const errors = {}
+
+  if (!username) {
+    errors.username = 'Required'
+  } else if (username.length < usernameConfig.length) {
+    errors.username = `Username must be at least ${usernameConfig.length} characters`
   }
 
-  if (!values.password) {
+  if (!password) {
     errors.password = 'Required'
-  } else if (values.password.length < pc.length) {
+  } else if (password.length < passwordConfig.length) {
     errors.password = `Password must have al lest ${passwordConfig.length} characters`
   }
   return errors

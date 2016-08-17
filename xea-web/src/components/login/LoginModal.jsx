@@ -34,10 +34,17 @@ class LoginModal extends Component {
   }
 
   render () {
+    const btnAsLinkStyle = {
+      outline: 'none',
+      textDecoration: 'none',
+      fontWeight: 300
+    }
     return (
       <ul className="nav navbar-nav navbar-right">
         <li>
-          <a onClick={this.open}>Log in</a>
+          <button className="btn btn-link navbar-btn" style={btnAsLinkStyle}onClick={this.open}>
+            Log in
+          </button>
         </li>
         <Modal show={this.state.showModal} onHide={this.close} >
           <Modal.Header closeButton>
