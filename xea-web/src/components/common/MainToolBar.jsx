@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
 
+import LoginModal from '../login/LoginModal'
+
 function MainToolBar () {
   return (
     <div>
@@ -29,6 +31,7 @@ function MainToolBar () {
                 <Link to="/about">About</Link>
               </li>
             </ul>
+            <LoginModal />
           </div>
         </div>
       </nav>
