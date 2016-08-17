@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Modal } from 'react-bootstrap'
 import { loginRequest } from '../../actions/authActions'
 
@@ -19,7 +20,7 @@ class LoginModal extends Component {
   handleFormSubmit (props) {
     console.log('handleFormSubmit')
     this.close()
-    loginRequest(props)
+    this.props.loginRequest(props)
   }
 
   close () {
@@ -52,6 +53,7 @@ class LoginModal extends Component {
 }
 
 LoginModal.propTypes = {
+  loginRequest: PropTypes.func.isRequired
 }
 
-export default LoginModal
+export default connect(null, { loginRequest })(LoginModal)

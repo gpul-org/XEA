@@ -28,6 +28,7 @@
   "author": "GPUL",
   "license": "AGPLv3",
   "dependencies": {
+    "axios": "0.13.1",
     "bootstrap": "3.3.7",
     "object-assign": "4.1.0",
     "react": "15.2.0",

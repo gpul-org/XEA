@@ -98,7 +98,7 @@ LoginForm.propTypes = {
 }
 
 // function mapStateToProps (state) {
-//   return { errorMessage: state.loginError.message }
+//   return { errorMessage: state.Error.message }
 // }
 
 const validate = (values) => {
