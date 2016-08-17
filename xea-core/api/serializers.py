@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .utils import ActivationMailFactory, TokenUtils
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from .utils import ActivationMailFactory
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,10 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
-        token = TokenUtils.get_token_for_link(user)
-        email = validated_data['email']
-        activation_link_id = urlsafe_base64_encode(force_bytes(user.pk))
-        ActivationMailFactory.send_activation_mail(email, activation_link_id, validated_data['username'], token)
+        ActivationMailFactory.send_activation_mail(user)
         return user
 
     def update(self, instance, validated_data):
