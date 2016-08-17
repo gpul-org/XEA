@@ -4,10 +4,9 @@ from rest_framework.decorators import detail_route
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth import get_user_model
 from . import serializers
-from .utils import TokenUtils
+from .utils import ActivationKeyUtils
 
 
 class RegisterUserView(CreateAPIView):
@@ -28,10 +27,10 @@ class ActivateUserView(APIView):
 
     @detail_route(methods=['get'])  # Is this useful at all?
     def activate_user(self, request, uidb64, token):
-        uid = urlsafe_base64_decode(uidb64)
+        uid = ActivationKeyUtils.decode_user_uidb64(uidb64)
         try:
             user = get_user_model().objects.get(pk=uid)
-            if TokenUtils.validate_token(user, token):
+            if ActivationKeyUtils.validate_token(user, token):
                 if not user.is_active:
                     user.is_active = True
                     user.save()
