@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
+import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
 // TODO: must be defined and enforced.
 const passwordConfig = {
@@ -9,14 +9,41 @@ const passwordConfig = {
 }
 
 class LoginForm extends Component {
+  constructor (props) {
+    super(props)
 
-  renderField ({ input, label, type, name, className, meta: { touched, error } }) {
+    this.getValidationState = this.getValidationState.bind(this)
+    this.renderReactBootstrapField = this.renderReactBootstrapField.bind(this)
+  }
+
+  getValidationState ({ active, pristine, error }) {
+    console.log(`pristine: ${pristine}\nerror: ${error}\nactive: ${active}`)
+    if (pristine) {
+      return 'success'
+    }
+    if (error) {
+      if (active) {
+        return 'warning'
+      }
+      return 'error'
+    }
+    return 'success'
+  }
+
+  renderField (
+    { name, placeholder, input, label, type, className,
+      meta: { touched, pristine, error, valid, active } }
+  ) {
     return (
-      <div className="form-group">
-        <label htmlFor={name}>{label}</label>
-        <input {...input} type={type} className={className} placeholder={label} id={name} />
-        {touched && error && <span className="help-block">{error}</span>}
-      </div>
+      <FormGroup validationState={this.getValidationState({ error, pristine, active })}>
+        <ControlLabel>{label}</ControlLabel>
+        <FormControl
+          {...input}
+          type={type}
+          placeholder={placeholder || name}
+        />
+        {touched && error && !pristine && <HelpBlock>{error}</HelpBlock>}
+      </FormGroup>
     )
   }
 
@@ -27,7 +54,8 @@ class LoginForm extends Component {
         <Field
           name="email"
           label="Email"
-          component={this.renderField}
+          placeholder="example@email.com"
+          component={this.renderReactBootstrapField}
           type="email"
           className="form-control"
         />
@@ -35,7 +63,7 @@ class LoginForm extends Component {
           name="password"
           label="Password"
           placeholder="Password"
-          component={this.renderField}
+          component={this.renderReactBootstrapField}
           type="password"
           className="form-control"
         />
