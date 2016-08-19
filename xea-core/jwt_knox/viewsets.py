@@ -29,7 +29,6 @@ class PerViewAuthenticatorMixin(object):
         if hasattr(self, 'action'):
             # action gets populated on the second time we are called
             per_view = self.get_authenticators_for_view(self.action)
-            print("We got an action: ", self.action, " with authenticators as follows")
             if per_view is not None:
                 authenticators = per_view
 
