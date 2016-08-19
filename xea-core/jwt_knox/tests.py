@@ -14,11 +14,11 @@ class APIAuthTest(APITestCase):
     test_logout_all_client_number = 3
 
     # Used URLs
-    login_url = reverse('jwt_knox:jwt_knox-get_token')
-    verify_url = reverse('jwt_knox:verify_token')
-    logout_current_url = reverse('jwt_knox:logout_current_token')
-    logout_other_url = reverse('jwt_knox:logout_other_tokens')
-    logout_all_url = reverse('jwt_knox:logout_all_user_tokens')
+    login_url = reverse('jwt_knox-get-token')
+    verify_url = reverse('jwt_knox-verify')
+    logout_current_url = reverse('jwt_knox-logout')
+    logout_other_url = reverse('jwt_knox-logout-other')
+    logout_all_url = reverse('jwt_knox-logout-all')
 
     def setUp(self):
         """
