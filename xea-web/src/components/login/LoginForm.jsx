@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { Field, reduxForm } from 'redux-form'
 import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
@@ -8,6 +9,13 @@ class LoginForm extends Component {
 
     this.getValidationState = this.getValidationState.bind(this)
     this.renderField = this.renderField.bind(this)
+  }
+
+  componentDidMount () {
+    const username = this.username
+    /* eslint-disable react/no-find-dom-node */
+    ReactDOM.findDOMNode(username).focus()
+    /* eslint-enable react/no-find-dom-node */
   }
 
   getValidationState ({ active, pristine, error }) {
@@ -42,6 +50,7 @@ class LoginForm extends Component {
         <ControlLabel>{label}</ControlLabel>
         <FormControl
           {...input}
+          ref={c => { this[`${name}`] = c }}
           type={type}
           placeholder={placeholder || name}
         />

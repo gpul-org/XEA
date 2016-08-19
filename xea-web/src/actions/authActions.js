@@ -5,7 +5,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_ERROR,
-  LOGOUT_SUCCESS
+  LOGOUT_SUCCESS,
+  LOGOUT_FAILURE,
+  LOGOUT_ERROR
 } from '../constants/actionTypes'
 
 export function loginRequest ({ username, password }) {
@@ -18,36 +20,32 @@ export function loginRequest ({ username, password }) {
         username,
         password
       },
-      validStatus: () => true
+      validateStatus: () => true
     }
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: 'yesss!'
-    })
-    // axios(LOGIN_URL, requestCfg)
-    //   .then(response => {
-    //     console.log('response:', response)
-    //     // TODO: Check status and dispatch appropriate action.
-    //     if (response.status === 200) {
-    //       dispatch({
-    //         type: LOGIN_SUCCESS,
-    //         payload: response.data.token
-    //       })
-    //     } else {
-    //       dispatch({
-    //         type: LOGIN_FAILURE,
-    //         payload: response
-    //       })
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //     dispatch({
-    //       type: LOGIN_ERROR,
-    //       payload: error
-    //     })
-    //   })
+    axios(LOGIN_URL, requestCfg)
+      .then(response => {
+        console.log('response:', response)
+        // TODO: Check status and dispatch appropriate action.
+        if (response.status === 200) {
+          dispatch({
+            type: LOGIN_SUCCESS,
+            payload: response.data.token
+          })
+        } else {
+          dispatch({
+            type: LOGIN_FAILURE,
+            payload: response.data.detail
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        dispatch({
+          type: LOGIN_ERROR,
+          payload: error
+        })
+      })
 
     // // Basic authorization hash <- base64 username(=username):password
     // const hash = window.btoa(`${username}:${password}`)
@@ -91,11 +89,42 @@ export function loginRequest ({ username, password }) {
   }
 }
 
-export function logoutRequest () {
-  console.log('logot requested')
+export function logoutRequest (token) {
+  console.log('logout requested')
   return dispatch => {
-    dispatch({
-      type: LOGOUT_SUCCESS
-    })
+    const requestCfg = {
+      method: 'post',
+      timeout: 3000,
+      validateStatus: () => true,
+      headers: {
+        Authorization: token
+      }
+    }
+
+    axios(LOGOUT_URL, requestCfg)
+      .then(response => {
+        console.log('log out response:', response)
+        if (response.status === 204) {
+          dispatch({
+            type: LOGOUT_SUCCESS
+          })
+        } else if (response.status === 401) {
+          dispatch({
+            type: LOGOUT_FAILURE,
+            payload: response.data.detail
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        dispatch({
+          type: LOGOUT_ERROR,
+          payload: err
+        })
+      })
+
+    // dispatch({
+    //   type: LOGOUT_SUCCESS
+    // })
   }
 }

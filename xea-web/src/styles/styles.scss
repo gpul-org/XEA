@@ -29,11 +29,14 @@ h2 {
 
 /*To show a button as a link in the manin tool bar (a navbar)*/
 .btn-as-navbar-link {
-
     font-weight: inherit;
 }
 
-.btn-as-navbar-link:focus:active {
+.btn-as-navbar-link:focus {
+  text-decoration: none;
+}
+
+.btn-as-navbar-link:active {
   outline: none !important;
 }
 
