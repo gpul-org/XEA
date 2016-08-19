@@ -44,6 +44,11 @@ class PerViewAuthenticatorMixin(object):
 class JWTKnoxAPIViewSet(PerViewAuthenticatorMixin, ViewSet):
     """This API endpoint set enables authentication via **JSON Web Tokens** (JWT).
 
+    The provided JWTs are meant for a single device only and to be
+    kept secret. The tokens may be set to expire after a certain time
+    (see `get_token`). The tokens may be revoked in the server via the
+    diverse logout endpoints. The JWTs are database-backed and may be
+    revoked at any time.
     """
     base_name = 'jwt_knox'
 
@@ -58,8 +63,8 @@ class JWTKnoxAPIViewSet(PerViewAuthenticatorMixin, ViewSet):
     def get_token(self, request, expires=None):
         """
         This view authenticates a user via the
-        JWT_LOGIN_AUTHENTICATION_CLASSES (which, in turn, defaults to
-        rest_framework's DEFAULT_AUTHENTICATION_CLASSES) to get a view
+        `JWT_LOGIN_AUTHENTICATION_CLASSES` (which, in turn, defaults to
+        rest_framework's `DEFAULT_AUTHENTICATION_CLASSES`) to get a view
         token.
         """
         token = create_auth_token(user=request.user, expires=expires)
@@ -77,7 +82,8 @@ class JWTKnoxAPIViewSet(PerViewAuthenticatorMixin, ViewSet):
         """
         This view returns internal data on the token, the user and the current
         request.
-        NOT TO BE USED IN PROUDCTION.
+
+        **NOT TO BE USED IN PROUDCTION.**
         """
         token = request.auth[0]
         return Response(
