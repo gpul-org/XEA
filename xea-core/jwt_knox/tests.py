@@ -24,15 +24,18 @@ class APIAuthTest(APITestCase):
         """
         Before each test, run the create_test_user fixture
         """
-        self.fixture_create_test_user()
+        self.user = self.fixture_create_test_user()
 
     def fixture_create_test_user(self):
         """
         Adds the default user to the database
         :return:
         """
-        User.objects.create_user(
-            username=self.username, email=self.email, password=self.password)
+        user = User.objects.create_user( username=self.username,
+                                         email=self.email, password=self.password)
+
+        return user
+
 
     def with_token(self, token):
         if not token:
@@ -57,9 +60,24 @@ class APIAuthTest(APITestCase):
     def logout_all(self):
         return self.client.post(self.logout_all_url)
 
+
+    def basic_authentication(self):
+        from base64 import b64encode
+        values = "{username}:{password}".format(
+            username=self.username,
+            password=self.password,
+        )
+        b64values = b64encode(values.encode('utf-8')).decode('utf-8')
+        auth_header = "Basic {0}".format(b64values)
+        self.client.credentials(HTTP_AUTHORIZATION=auth_header)
+        return self
+
     def get_token(self):
-        self.client.login(username=self.username, password=self.password)
+        # Instead of force_authenticate, we can also use basic_authentication
+        # self.basic_authentication()
+        self.client.force_authenticate(user=self.user)
         response = self.client.post(self.login_url)
+        self.client.force_authenticate() # Unset authentication after our request
         return response
 
     def get_n_tokens(self, n):
@@ -69,11 +87,13 @@ class APIAuthTest(APITestCase):
         :return:
         """
         response_list = []
-        self.client.login(username=self.username, password=self.password)
+        self.basic_authentication()
+        self.client.force_authenticate(user=self.user)
         for i in range(0, n):
             response = self.client.post(self.login_url)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             response_list.append(response)
+        self.client.force_authenticate() # Unset authentication after our request
         return response_list
 
     def test_get_token(self):
