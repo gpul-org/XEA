@@ -2,7 +2,7 @@ import React from 'react'
 
 function ErrorMessage (props) {
   return (
-    <div className="form__error-wrapper js-form__err-animation text-danger bg-danger">
+    <div className="form__error-wrapper text-danger bg-danger">
       <p className="form__error">
         {props.error}
       </p>

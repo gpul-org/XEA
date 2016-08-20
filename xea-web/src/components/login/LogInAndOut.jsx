@@ -18,49 +18,37 @@ class LogInAndOut extends Component {
     this.handleLogout = this.handleLogout.bind(this)
   }
 
-  componentWillMount () {
-    const { inProgress, errorMessage } = this.props
-    const showModal = inProgress || errorMessage
-
-    console.log(`LogInAndOut (componentWillMount):\ninProgress:
-      ${inProgress}\nerror: ${errorMessage}`)
-    this.setState({ showModal })
-  }
+  // componentWillMount () {
+  //   const { inProgress, errorMessage } = this.props
+  //   const showModal = inProgress || errorMessage
+  //   this.setState({ showModal })
+  // }
 
   componentWillReceiveProps (nextProps) {
     const { inProgress, errorMessage } = nextProps
     let showModal = false
-    if (inProgress || this.props.errorMessage) {
+    if (inProgress || errorMessage) {
       showModal = true
     }
-    console.log(`compWillRecProps: inProgress = ${inProgress}, error = ${errorMessage}.`)
     this.setState({ showModal })
   }
 
   handleLogout () {
-    console.log('handleLogout')
-    console.log(`show modal: ${this.state.showModal}\nerror: ${this.props.errorMessage}\n
-      in progress: ${this.props.inProgress}`)
     this.props.logoutRequest(this.props.token)
   }
 
   handleLogin (props) {
-    const { inProgress, error } = props
-    const showModal = this.state.showModal
-    console.log('handleFormSubmit')
-    console.log(`show modal: ${showModal}\nerror: ${error}\nin progress: ${inProgress}`)
     this.props.loginRequest(props)
   }
 
   close () {
-    console.log('closing')
+    // If login in progress or messageError we prevent closing modal.
     if (!this.props.inProgress) {
       this.setState({ showModal: false })
     }
   }
 
   open () {
-    console.log('opening')
     this.setState({ showModal: true })
   }
 
@@ -107,10 +95,8 @@ class LogInAndOut extends Component {
 
   render () {
     if (this.props.token) {
-      console.log('Log out')
       return this.renderLogOut()
     }
-    console.log('Log in')
     return this.renderLogIn()
   }
 }

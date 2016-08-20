@@ -15,7 +15,6 @@ import {
 } from '../constants/actionTypes'
 
 export function loginRequest ({ username, password }) {
-  console.log(`(login requested) username: ${username}, password: ${password}`)
   return dispatch => {
     dispatch({
       type: LOGIN_IN_PROGRESS
@@ -33,8 +32,6 @@ export function loginRequest ({ username, password }) {
 
     axios(LOGIN_URL, requestCfg)
       .then(response => {
-        console.log('response:', response)
-        // TODO: Check status and dispatch appropriate action.
         if (response.status === 200) {
           dispatch({
             type: LOGIN_SUCCESS,
@@ -48,7 +45,6 @@ export function loginRequest ({ username, password }) {
         }
       })
       .catch(error => {
-        console.log(error)
         dispatch({
           type: LOGIN_ERROR,
           payload: error
@@ -98,7 +94,6 @@ export function loginRequest ({ username, password }) {
 }
 
 export function logoutRequest (token) {
-  console.log('logout requested')
   return dispatch => {
     dispatch({
       type: LOGOUT_IN_PROGRESS
@@ -114,11 +109,11 @@ export function logoutRequest (token) {
 
     axios(LOGOUT_URL, requestCfg)
       .then(response => {
-        console.log('log out response:', response)
         if (response.status === 204) {
           dispatch({
             type: LOGOUT_SUCCESS
           })
+          // We redirect to the main page.
           browserHistory.push('/main')
         } else if (response.status === 401) {
           dispatch({
@@ -128,21 +123,15 @@ export function logoutRequest (token) {
         }
       })
       .catch((err) => {
-        console.log(err)
         dispatch({
           type: LOGOUT_ERROR,
           payload: err
         })
       })
-
-    // dispatch({
-    //   type: LOGOUT_SUCCESS
-    // })
   }
 }
 
 export function dismissAuthErrorMessage () {
-  console.log('dismissAuthError')
   return {
     type: DISMISS_AUTH_ERROR_MESSAGE
   }

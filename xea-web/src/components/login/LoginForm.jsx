@@ -14,18 +14,12 @@ class LoginForm extends Component {
     this.renderField = this.renderField.bind(this)
   }
 
-  componentDidMount () {
-    console.log('(Loginform): WTF')
+  componentWillReceiveProps (nextProps) {
     // this.username.focus()
     const username = this.username
     /* eslint-disable react/no-find-dom-node */
     ReactDOM.findDOMNode(username).focus()
     /* eslint-enable react/no-find-dom-node */
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const { authError } = nextProps
-    console.log(`LoginForm (compWilRecProps): ${authError}`)
   }
 
   getValidationState ({ active, pristine, error }) {
