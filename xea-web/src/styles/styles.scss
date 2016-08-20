@@ -44,6 +44,26 @@ h2 {
   text-decoration: none;
 }
 
+// Error msg
+.js-form__err-animation {
+  animation: shake 150ms ease-in-out;
+}
+
+.form__error-wrapper {
+  // display: none;
+  justify-content: center;
+  max-width: calc(100% - 2em);
+  margin: 0 auto;
+  margin-bottom: 1em;
+}
+
+.form__error {
+  // display: none;
+  margin: 0;
+  padding: 0.5em 1em;
+  user-select: none;
+}
+
 .savings { color: $vin-green; }
 .loss { color: $vin-red; }
 input.small { width: 46px; }

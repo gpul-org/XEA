@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom'
+import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
+
+import { dismissAuthErrorMessage } from '../../actions/authActions'
+import ErrorMessage from '../common/ErrorMessage'
 
 class LoginForm extends Component {
   constructor (props) {
@@ -9,17 +13,26 @@ class LoginForm extends Component {
 
     this.getValidationState = this.getValidationState.bind(this)
     this.renderField = this.renderField.bind(this)
+    this.handleFormSubmit = this.handleFormSubmit.bind(this)
+    this.handleOnFocus = this.handleOnFocus.bind(this)
+    this.dismissErrorMessage = this.dismissErrorMessage.bind(this)
   }
 
   componentDidMount () {
+    console.log('(Loginform): WTF')
+    // this.username.focus()
     const username = this.username
     /* eslint-disable react/no-find-dom-node */
     ReactDOM.findDOMNode(username).focus()
     /* eslint-enable react/no-find-dom-node */
   }
 
+  componentWillReceiveProps (nextProps) {
+    const { authError } = nextProps
+    console.log(`LoginForm (compWilRecProps): ${authError}`)
+  }
+
   getValidationState ({ active, pristine, error }) {
-    console.log(`pristine: ${pristine}\nerror: ${error}\nactive: ${active}`)
     if (pristine) {
       return 'success'
     }
@@ -35,21 +48,41 @@ class LoginForm extends Component {
   usernameNormalicer (value, previousValue) {
     // Prevent user form use whitespaces
     if (/\s+/.test(value)) {
-      console.log('wtf:', value)
       return previousValue
     }
     return value
   }
 
-  renderField (
-    { name, placeholder, input, label, type, className,
-      meta: { touched, pristine, error, valid, active } }
-  ) {
+  dismissErrorMessage () {
+    console.log('LoginForm (dismissError)')
+    if (this.props.errorMessage) {
+      this.props.dismissAuthErrorMessage()
+    }
+  }
+
+  handleOnFocus (event) {
+    console.log('onFocus:')
+    this.dismissErrorMessage()
+  }
+
+  handleFormSubmit (props) {
+    console.log('LoginForm (handelFormSub) props:', this.props)
+    if (this.props.errorMessage) {
+      this.dismissErrorMessage()
+    }
+    this.props.handleFormSubmit(props)
+  }
+
+  renderField ({ name, placeholder, input, label, type, onFocus,
+    meta: { touched, pristine, error, valid, active } }) {
+    console.log('Field input.onFocus:', input.onFocus)
+    console.log('Field props.onFocus:', onFocus)
     return (
       <FormGroup validationState={this.getValidationState({ error, pristine, active })}>
         <ControlLabel>{label}</ControlLabel>
         <FormControl
           {...input}
+          onFocus={onFocus}
           ref={c => { this[`${name}`] = c }}
           type={type}
           placeholder={placeholder || name}
@@ -60,16 +93,20 @@ class LoginForm extends Component {
   }
 
   render () {
-    const { handleSubmit, reset, pristine, submitting, valid } = this.props
+    const { handleSubmit, reset, pristine, submitting, valid, errorMessage } = this.props
     return (
-      <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
+      // <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
+      <form onSubmit={handleSubmit(this.handleFormSubmit)}>
+        {errorMessage ? <ErrorMessage error={errorMessage} /> : null}
         <Field
           name="username"
           label="User name"
           placeholder="username"
           component={this.renderField}
           type="text"
-          className="form-control"
+          onBlur={event => { console.log(`${this.name} onBlur`) }}
+          onFocus={this.handleOnFocus}
+          onChange={event => { console.log(`${this.name} onChange`) }}
           normalize={this.usernameNormalicer}
         />
         <Field
@@ -78,19 +115,21 @@ class LoginForm extends Component {
           placeholder="Password"
           component={this.renderField}
           type="password"
-          className="form-control"
         />
         <div>
           <button
             disabled={pristine || submitting || !valid}
             className="btn btn-primary"
           >
-            Login
+            Log in
           </button>
           <button
             type="button"
             disabled={pristine || submitting}
-            onClick={reset}
+            onClick={() => {
+              reset()
+              this.dismissErrorMessage()
+            }}
             className="btn btn-warning pull-right"
           >
             Clear Values
@@ -102,12 +141,14 @@ class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
+  errorMessage: PropTypes.string,
   valid: PropTypes.bool,
   pristine: PropTypes.bool,
   submitting: PropTypes.bool,
   reset: PropTypes.func,
   handleSubmit: PropTypes.func,
-  handleFormSubmit: PropTypes.func
+  handleFormSubmit: PropTypes.func,
+  dismissAuthErrorMessage: PropTypes.func
 }
 
 // function mapStateToProps (state) {
@@ -124,7 +165,6 @@ const usernameConfig = {
 }
 
 const validate = ({ username, password }) => {
-  console.log(`username: ${username}, password: ${password}`)
   const errors = {}
 
   if (!username) {
@@ -146,4 +186,11 @@ const formOptions = {
   validate
 }
 
-export default reduxForm(formOptions)(LoginForm)
+function mapStateToProps (state) {
+  return {
+    errorMessage: state.auth.errorMessage
+  }
+}
+
+export default connect(mapStateToProps,
+  { dismissAuthErrorMessage })(reduxForm(formOptions)(LoginForm))

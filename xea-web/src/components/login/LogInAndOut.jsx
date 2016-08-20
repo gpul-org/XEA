@@ -18,20 +18,43 @@ class LogInAndOut extends Component {
     this.handleLogout = this.handleLogout.bind(this)
   }
 
+  componentWillMount () {
+    const { inProgress, error } = this.props
+    const showModal = inProgress || error
+
+    console.log(`LogInAndOut (componentWillMount):\ninProgress: ${inProgress}\nerror: ${error}`)
+    this.setState({ showModal })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const { inProgress, error } = nextProps
+    let showModal = false
+    if (inProgress || error) {
+      showModal = true
+    }
+    console.log(`compWillRecProps: inProgress = ${inProgress}, error = ${error}.`)
+    this.setState({ showModal })
+  }
+
   handleLogout () {
     console.log('handleLogout')
+    console.log(`show modal: ${this.state.showModal}\nerror: ${this.props.error}\nin progress: ${this.props.inProgress}`)
     this.props.logoutRequest(this.props.token)
   }
 
   handleLogin (props) {
+    const { inProgress, error } = props
+    const showModal = this.state.showModal
     console.log('handleFormSubmit')
-    this.close()
+    console.log(`show modal: ${showModal}\nerror: ${error}\nin progress: ${inProgress}`)
     this.props.loginRequest(props)
   }
 
   close () {
     console.log('closing')
-    this.setState({ showModal: false })
+    if (!this.props.inProgress) {
+      this.setState({ showModal: false })
+    }
   }
 
   open () {
@@ -65,12 +88,15 @@ class LogInAndOut extends Component {
             Log in
           </button>
         </li>
-        <Modal bsSize="small" show={this.state.showModal} onHide={this.close} >
+        <Modal
+          bsSize="small"
+          show={this.state.showModal} onHide={this.close}
+        >
           <Modal.Header closeButton>
             <Modal.Title>Log in</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <LoginForm handleFormSubmit={this.handleLogin} />
+            <LoginForm error={this.props.error} handleFormSubmit={this.handleLogin} />
           </Modal.Body>
         </Modal>
       </ul>
@@ -90,12 +116,16 @@ class LogInAndOut extends Component {
 LogInAndOut.propTypes = {
   loginRequest: PropTypes.func.isRequired,
   logoutRequest: PropTypes.func.isRequired,
-  token: PropTypes.string
+  token: PropTypes.string,
+  error: PropTypes.bool,
+  inProgress: PropTypes.bool
 }
 
 function mapStateToProps (state) {
   return {
-    token: state.auth.token
+    token: state.auth.token,
+    inProgress: state.auth.inProgress,
+    error: state.auth.error
   }
 }
 

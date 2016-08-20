@@ -2,17 +2,24 @@ import axios from 'axios'
 
 import { LOGIN_URL, VERIFY_URL, LOGOUT_URL, LOGOUT_ALL_URL } from '../constants/urls'
 import {
+  LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_ERROR,
+  LOGOUT_IN_PROGRESS,
   LOGOUT_SUCCESS,
   LOGOUT_FAILURE,
-  LOGOUT_ERROR
+  LOGOUT_ERROR,
+  DISMISS_AUTH_ERROR_MESSAGE
 } from '../constants/actionTypes'
 
 export function loginRequest ({ username, password }) {
   console.log(`(login requested) username: ${username}, password: ${password}`)
   return dispatch => {
+    dispatch({
+      type: LOGIN_IN_PROGRESS
+    })
+
     const requestCfg = {
       method: 'post',
       timeout: 3000,
@@ -92,6 +99,9 @@ export function loginRequest ({ username, password }) {
 export function logoutRequest (token) {
   console.log('logout requested')
   return dispatch => {
+    dispatch({
+      type: LOGOUT_IN_PROGRESS
+    })
     const requestCfg = {
       method: 'post',
       timeout: 3000,
@@ -126,5 +136,12 @@ export function logoutRequest (token) {
     // dispatch({
     //   type: LOGOUT_SUCCESS
     // })
+  }
+}
+
+export function dismissAuthErrorMessage () {
+  console.log('dismissAuthError')
+  return {
+    type: DISMISS_AUTH_ERROR_MESSAGE
   }
 }
