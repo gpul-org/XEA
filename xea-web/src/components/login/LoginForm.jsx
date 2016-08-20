@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap'
 
-import { dismissAuthErrorMessage } from '../../actions/authActions'
 import ErrorMessage from '../common/ErrorMessage'
 
 class LoginForm extends Component {
@@ -13,9 +12,6 @@ class LoginForm extends Component {
 
     this.getValidationState = this.getValidationState.bind(this)
     this.renderField = this.renderField.bind(this)
-    this.handleFormSubmit = this.handleFormSubmit.bind(this)
-    this.handleOnFocus = this.handleOnFocus.bind(this)
-    this.dismissErrorMessage = this.dismissErrorMessage.bind(this)
   }
 
   componentDidMount () {
@@ -53,36 +49,13 @@ class LoginForm extends Component {
     return value
   }
 
-  dismissErrorMessage () {
-    console.log('LoginForm (dismissError)')
-    if (this.props.errorMessage) {
-      this.props.dismissAuthErrorMessage()
-    }
-  }
-
-  handleOnFocus (event) {
-    console.log('onFocus:')
-    this.dismissErrorMessage()
-  }
-
-  handleFormSubmit (props) {
-    console.log('LoginForm (handelFormSub) props:', this.props)
-    if (this.props.errorMessage) {
-      this.dismissErrorMessage()
-    }
-    this.props.handleFormSubmit(props)
-  }
-
-  renderField ({ name, placeholder, input, label, type, onFocus,
+  renderField ({ name, placeholder, input, label, type,
     meta: { touched, pristine, error, valid, active } }) {
-    console.log('Field input.onFocus:', input.onFocus)
-    console.log('Field props.onFocus:', onFocus)
     return (
       <FormGroup validationState={this.getValidationState({ error, pristine, active })}>
         <ControlLabel>{label}</ControlLabel>
         <FormControl
           {...input}
-          onFocus={onFocus}
           ref={c => { this[`${name}`] = c }}
           type={type}
           placeholder={placeholder || name}
@@ -96,7 +69,7 @@ class LoginForm extends Component {
     const { handleSubmit, reset, pristine, submitting, valid, errorMessage } = this.props
     return (
       // <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
-      <form onSubmit={handleSubmit(this.handleFormSubmit)}>
+      <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
         {errorMessage ? <ErrorMessage error={errorMessage} /> : null}
         <Field
           name="username"
@@ -104,9 +77,6 @@ class LoginForm extends Component {
           placeholder="username"
           component={this.renderField}
           type="text"
-          onBlur={event => { console.log(`${this.name} onBlur`) }}
-          onFocus={this.handleOnFocus}
-          onChange={event => { console.log(`${this.name} onChange`) }}
           normalize={this.usernameNormalicer}
         />
         <Field
@@ -126,10 +96,7 @@ class LoginForm extends Component {
           <button
             type="button"
             disabled={pristine || submitting}
-            onClick={() => {
-              reset()
-              this.dismissErrorMessage()
-            }}
+            onClick={reset}
             className="btn btn-warning pull-right"
           >
             Clear Values
@@ -147,8 +114,7 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool,
   reset: PropTypes.func,
   handleSubmit: PropTypes.func,
-  handleFormSubmit: PropTypes.func,
-  dismissAuthErrorMessage: PropTypes.func
+  handleFormSubmit: PropTypes.func
 }
 
 // function mapStateToProps (state) {
@@ -192,5 +158,4 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps,
-  { dismissAuthErrorMessage })(reduxForm(formOptions)(LoginForm))
+export default connect(mapStateToProps)(reduxForm(formOptions)(LoginForm))

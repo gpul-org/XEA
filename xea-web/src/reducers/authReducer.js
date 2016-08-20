@@ -1,4 +1,4 @@
-import { browserHistory } from 'react-router'
+
 
 import {
   LOGIN_SUCCESS,
@@ -43,12 +43,12 @@ export default function (state = {}, action) {
     case LOGOUT_SUCCESS:
       // We redirect to the main page.
       console.log('Log out success :)')
-      browserHistory.push('/main')
+      // browserHistory.push('/main')
       return { ...state, token: null, inProgress: false, error: null }
     case LOGOUT_FAILURE:
       // As the token was invalid we must be alredy without authorization.
       console.log('Log out failure :(')
-      browserHistory.push('/main')
+      // browserHistory.push('/main')
       return { ...state, inProgress: false, errorMessage: action.payload }
     case LOGOUT_ERROR:
       console.log('Log out error XP')

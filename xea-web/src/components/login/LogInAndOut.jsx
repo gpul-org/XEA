@@ -19,26 +19,28 @@ class LogInAndOut extends Component {
   }
 
   componentWillMount () {
-    const { inProgress, error } = this.props
-    const showModal = inProgress || error
+    const { inProgress, errorMessage } = this.props
+    const showModal = inProgress || errorMessage
 
-    console.log(`LogInAndOut (componentWillMount):\ninProgress: ${inProgress}\nerror: ${error}`)
+    console.log(`LogInAndOut (componentWillMount):\ninProgress:
+      ${inProgress}\nerror: ${errorMessage}`)
     this.setState({ showModal })
   }
 
   componentWillReceiveProps (nextProps) {
-    const { inProgress, error } = nextProps
+    const { inProgress, errorMessage } = nextProps
     let showModal = false
-    if (inProgress || error) {
+    if (inProgress || this.props.errorMessage) {
       showModal = true
     }
-    console.log(`compWillRecProps: inProgress = ${inProgress}, error = ${error}.`)
+    console.log(`compWillRecProps: inProgress = ${inProgress}, error = ${errorMessage}.`)
     this.setState({ showModal })
   }
 
   handleLogout () {
     console.log('handleLogout')
-    console.log(`show modal: ${this.state.showModal}\nerror: ${this.props.error}\nin progress: ${this.props.inProgress}`)
+    console.log(`show modal: ${this.state.showModal}\nerror: ${this.props.errorMessage}\n
+      in progress: ${this.props.inProgress}`)
     this.props.logoutRequest(this.props.token)
   }
 
@@ -96,7 +98,7 @@ class LogInAndOut extends Component {
             <Modal.Title>Log in</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <LoginForm error={this.props.error} handleFormSubmit={this.handleLogin} />
+            <LoginForm error={this.props.errorMessage} handleFormSubmit={this.handleLogin} />
           </Modal.Body>
         </Modal>
       </ul>
@@ -117,7 +119,7 @@ LogInAndOut.propTypes = {
   loginRequest: PropTypes.func.isRequired,
   logoutRequest: PropTypes.func.isRequired,
   token: PropTypes.string,
-  error: PropTypes.bool,
+  errorMessage: PropTypes.string,
   inProgress: PropTypes.bool
 }
 
@@ -125,7 +127,7 @@ function mapStateToProps (state) {
   return {
     token: state.auth.token,
     inProgress: state.auth.inProgress,
-    error: state.auth.error
+    errorMessage: state.auth.errorMessage
   }
 }
 

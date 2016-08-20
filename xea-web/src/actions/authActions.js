@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 
-import { LOGIN_URL, VERIFY_URL, LOGOUT_URL, LOGOUT_ALL_URL } from '../constants/urls'
+import { LOGIN_URL, LOGOUT_URL } from '../constants/urls'
 import {
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
@@ -118,6 +119,7 @@ export function logoutRequest (token) {
           dispatch({
             type: LOGOUT_SUCCESS
           })
+          browserHistory.push('/main')
         } else if (response.status === 401) {
           dispatch({
             type: LOGOUT_FAILURE,
