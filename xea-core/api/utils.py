@@ -16,16 +16,19 @@ class ActivationMailFactory:
 
     @staticmethod
     def send_activation_mail(user):
-        uid = ActivationKeyUtils.get_user_uidb64(user)
-        token = ActivationKeyUtils.get_token(user)
+        """
+        This funcion is used to send a mail containing the activation link to the new user's email address
+        :param user: The user object related to the new user account
+        :return:
+        """
+        url = ActivationKeyUtils.build_activation_url(user)
         username = user.username
         to_email = user.email
-        body_context = {'host': ActivationMailFactory.host, 'uidb64': uid, 'token': token, 'username': username,
-                        'uri': reverse('activation')}
+        body_context = {'username': username,'host': ActivationMailFactory.host, 'url': url}
         msg = ActivationMailFactory.default_msg.render(body_context)
         print(msg)
-        send_mail(ActivationMailFactory.default_subject, msg, ActivationMailFactory.from_email, [to_email],
-                  fail_silently=False)
+        send_mail(subject=ActivationMailFactory.default_subject, message=msg,
+                  from_email=ActivationMailFactory.from_email, recipient_list=[to_email], fail_silently=False)
 
 
 class ActivationKeyUtils:
@@ -47,3 +50,12 @@ class ActivationKeyUtils:
     @staticmethod
     def decode_user_uidb64(uid):
         return urlsafe_base64_decode(uid)
+
+    @staticmethod
+    def build_activation_url(user):
+        uidb64 = ActivationKeyUtils.get_user_uidb64(user)
+        token = ActivationKeyUtils.get_token(user)
+        activation_root_url = reverse('activation')
+        url = '{root}{uidb64}/{token}'.format(root=activation_root_url,
+                                              uidb64=uidb64.decode('utf8'), token=token)
+        return url
