@@ -17,6 +17,10 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
     def create(self, validated_data):
+        """
+        Here the new User object is created.
+        At the end of the process we will send and activation mail to the user's email address
+        """
         user = get_user_model().objects.create(
             username=validated_data['username'],
             email=validated_data['email'],
