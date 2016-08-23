@@ -9,7 +9,9 @@ import {
   DISMISS_AUTH_ERROR_MESSAGE
 } from '../constants/actionTypes'
 
-export default function (state = {}, action) {
+import initialState from './initialState'
+
+export default function (state = initialState.auth, action) {
   switch (action.type) {
     case LOGIN_IN_PROGRESS:
       return { ...state, inProgress: true }

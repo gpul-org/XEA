@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap'
 import { loginRequest, logoutRequest } from '../../actions/authActions'
 
 import LoginForm from './LoginForm'
+import UserMenu from './UserMenu'
 
 class LogInAndOut extends Component {
   constructor (props) {
@@ -38,6 +39,7 @@ class LogInAndOut extends Component {
   }
 
   handleLogin (props) {
+    this.setState({ username: props.username })
     this.props.loginRequest(props)
   }
 
@@ -56,12 +58,7 @@ class LogInAndOut extends Component {
     return (
       <ul className="nav navbar-nav navbar-right">
         <li>
-          <button
-            className="btn btn-link navbar-btn btn-as-navbar-link"
-            onClick={this.handleLogout}
-          >
-            Log out
-          </button>
+          <UserMenu username={this.state.username} handleLogout={this.handleLogout} />
         </li>
       </ul>
     )
