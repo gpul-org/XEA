@@ -1,4 +1,6 @@
 from django.core.urlresolvers import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -100,11 +102,12 @@ class RegistrationTest(APITestCase):
         We also verify that his "is_active" flag is set to False (he needs to activate trough the email yet)
         :return:
         """
-        id = self.register_n_users(1)
-        queryset = User.objects.all().filter(pk=id[0])
+        uid = self.register_n_users(1)[0]
+        queryset = User.objects.all().filter(pk=uid)
         self.assertTrue(queryset.exists())
         newuser = queryset[0]
         self.assertFalse(newuser.is_active)
+        return uid
 
     def test_register_multiple_users(self):
         """
@@ -151,6 +154,17 @@ class RegistrationTest(APITestCase):
         """
         self.register_user()
         url = 'http://127.0.0.1:8000/api/activation/MF/4eh-xxxxxxxxxxxxxxxx/'
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_not_valid_token(self):
+        """
+        Similar to the previous one, now we will try to use a valid uidb64 with a not valid token
+        :return:
+        """
+        uid = self.register_user()
+        uidb64 = urlsafe_base64_encode(force_bytes(uid))
+        url = 'http://127.0.0.1:8000/api/activation/' + uidb64.decode('utf8') + '/4eh-xxxxxxxxxxxxxxxx/'
         response = self.client.get(url)
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
