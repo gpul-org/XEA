@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'knox',
     'jwt_knox',
-    'api'
+    'api',
+    'accounts'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'xea_core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['./xea-core/api/templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

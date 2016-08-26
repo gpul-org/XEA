@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'api/auth/jwt/', include('jwt_knox.urls', namespace='jwt_knox')),
 
     url(r'^api/', include('api.urls')),
+
+    url(r'accounts/', include ('accounts.urls')),
 ]
