@@ -17,5 +17,6 @@ class UserProfileViewSet(ModelViewSet):
         serializer = UserProfileSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             user.save()
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

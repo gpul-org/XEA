@@ -13,12 +13,17 @@ class UserProfileTest(APITestCase):
     last_name = 'Prova'
     email = 'prova@prova.prova'
     password = 'usuario123'
+    username2 = 'prova2'
+    first_name2 = 'Prova'
+    last_name2 = 'Prova'
+    email2 = 'prova2@prova.prova'
+    password2 = 'usuario123'
 
-    payload = dict(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+    payload1 = dict(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
+    payload2 = dict(username=username2, first_name=first_name2, last_name=last_name2, email=email2, password=password2)
 
     registration_url = reverse('registration')
     activation_url = reverse('activation')
-    update_url = 'http://127.0.0.1:8000/accounts/profiles/1/'
 
     def get_activation_url_from_email(self, email):
         """
@@ -31,7 +36,7 @@ class UserProfileTest(APITestCase):
 
     def setUp(self):
         # We register a new user and we activate it
-        self.client.post(self.registration_url, self.payload)
+        self.client.post(self.registration_url, self.payload1)
         activation_email = mail.outbox[0]
         url = self.get_activation_url_from_email(activation_email)
         self.client.get(url)
@@ -51,19 +56,40 @@ class UserProfileTest(APITestCase):
         queryset = User.objects.all()
         user = queryset[0]
         self.client.force_login(user)
-        response = self.client.put(path=self.update_url, data={"gender": "M", "nationality": "Argosdfdegfsey",
+        #update_url = reverse('profiles-detail', kwargs={'pk': 1})
+        response = self.client.put(path='/accounts/profiles/1/', data={"gender": "M", "nationality": "Argosdfdegfsey",
                                                     "location": "palermo"})
-        print(response.data)
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_profile_updated_by_staff(self):
-        pass
+        admin = User.objects.create_superuser('admin', 'admin@domain.test','password')
+        self.client.force_login(admin)
+        response = self.client.put(path='/accounts/profiles/1/', data={"gender": "M", "nationality": "Argosdfdegfsey",
+                                                                       "location": "palermo"})
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_profile_updated_by_logged_user(self):
-        pass
+        self.client.post(self.registration_url, self.payload2)
+        activation_email = mail.outbox[1]
+        url = self.get_activation_url_from_email(activation_email)
+        self.client.get(url)
+        queryset = User.objects.all()
+        self.assertEquals(len(queryset), 2)
+        user = queryset[1]
+        self.client.force_login(user)
+        response = self.client.put(path='/accounts/profiles/1/', data={"gender": "M", "nationality": "Argosdfdegfsey",
+                                                                       "location": "palermo"})
+        self.assertEquals(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_profile_updated_by_guest(self):
-        pass
+        response = self.client.put(path='/accounts/profiles/1/', data={"gender": "M", "nationality": "Argosdfdegfsey",
+                                                          "location": "palermo"})
+        self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_user_profile(self):
-        pass
+        response = self.client.get('/accounts/profiles/1/')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertTrue('gender' in response.data)
+        self.assertTrue('nationality' in response.data)
+        self.assertTrue('birthday' in response.data)
+        self.assertTrue('location' in response.data)
