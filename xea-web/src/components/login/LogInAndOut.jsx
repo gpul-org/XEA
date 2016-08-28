@@ -44,7 +44,7 @@ class LogInAndOut extends Component {
   }
 
   close () {
-    // If login in progress or messageError we prevent closing modal.
+    // If login in progress we prevent modal form closing.
     if (!this.props.inProgress) {
       this.setState({ showModal: false })
     }

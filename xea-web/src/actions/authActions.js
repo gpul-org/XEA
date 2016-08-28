@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 
-import { LOGIN_URL, LOGOUT_URL } from '../constants/urls'
 import {
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
@@ -13,6 +12,13 @@ import {
   LOGOUT_ERROR,
   DISMISS_AUTH_ERROR_MESSAGE
 } from '../constants/actionTypes'
+
+import URL from '../constants/urls.js'
+
+const URLs = new URL()
+
+const LOGIN_URL = URLs.login()
+const LOGOUT_URL = URLs.logout()
 
 export function loginRequest ({ username, password }) {
   return dispatch => {
@@ -101,7 +107,7 @@ export function logoutRequest (token) {
     const requestCfg = {
       method: 'post',
       timeout: 3000,
-      validateStatus: () => true,
+      validateStatus: (status) => status < 500,
       headers: {
         Authorization: token
       }
@@ -109,7 +115,7 @@ export function logoutRequest (token) {
 
     axios(LOGOUT_URL, requestCfg)
       .then(response => {
-        if (response.status === 204) {
+        if (response.status >= 200 && response.url < 300) {
           dispatch({
             type: LOGOUT_SUCCESS
           })

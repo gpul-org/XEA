@@ -30,6 +30,7 @@
   "dependencies": {
     "axios": "0.13.1",
     "bootstrap": "3.3.7",
+    "json-loader": "0.5.4",
     "object-assign": "4.1.0",
     "react": "15.2.0",
     "react-bootstrap": "0.30.2",
