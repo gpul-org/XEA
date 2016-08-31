@@ -22,7 +22,7 @@ class LoginForm extends Component {
     /* eslint-enable react/no-find-dom-node */
   }
 
-  getValidationState ({ active, pristine, error }) {
+  getValidationState ({ pristine, active, error }) {
     if (pristine) {
       return 'success'
     }
@@ -46,7 +46,7 @@ class LoginForm extends Component {
   renderField ({ name, placeholder, input, label, type,
     meta: { touched, pristine, error, valid, active } }) {
     return (
-      <FormGroup validationState={this.getValidationState({ error, pristine, active })}>
+      <FormGroup validationState={this.getValidationState({ pristine, active, error })}>
         <ControlLabel>{label}</ControlLabel>
         <FormControl
           {...input}
@@ -124,7 +124,7 @@ const usernameConfig = {
   length: 8
 }
 
-const validate = ({ username, password }) => {
+function validate ({ username, password }) {
   const errors = {}
 
   if (!username) {
@@ -140,6 +140,23 @@ const validate = ({ username, password }) => {
   }
   return errors
 }
+
+// const validate = ({ username, password }) => {
+//   const errors = {}
+//
+//   if (!username) {
+//     errors.username = 'Required'
+//   } else if (username.length < usernameConfig.length) {
+//     errors.username = `Username must be at least ${usernameConfig.length} characters`
+//   }
+//
+//   if (!password) {
+//     errors.password = 'Required'
+//   } else if (password.length < passwordConfig.length) {
+//     errors.password = `Password must have al lest ${passwordConfig.length} characters`
+//   }
+//   return errors
+// }
 
 const formOptions = {
   form: 'login',
