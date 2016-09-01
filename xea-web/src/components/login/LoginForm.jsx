@@ -35,7 +35,7 @@ class LoginForm extends Component {
     return 'success'
   }
 
-  usernameNormalicer (value, previousValue) {
+  usernameNormalizer (value, previousValue) {
     // Prevent user form use whitespaces
     if (/\s+/.test(value)) {
       return previousValue
@@ -62,7 +62,6 @@ class LoginForm extends Component {
   render () {
     const { handleSubmit, reset, pristine, submitting, valid, errorMessage } = this.props
     return (
-      // <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
       <form onSubmit={handleSubmit(this.props.handleFormSubmit)}>
         {errorMessage ? <ErrorMessage error={errorMessage} /> : null}
         <Field
@@ -71,7 +70,7 @@ class LoginForm extends Component {
           placeholder="username"
           component={this.renderField}
           type="text"
-          normalize={this.usernameNormalicer}
+          normalize={this.usernameNormalizer}
         />
         <Field
           name="password"
@@ -111,10 +110,6 @@ LoginForm.propTypes = {
   handleFormSubmit: PropTypes.func
 }
 
-// function mapStateToProps (state) {
-//   return { errorMessage: state.Error.message }
-// }
-
 // TODO: must be defined and enforced.
 const passwordConfig = {
   length: 6,
@@ -140,23 +135,6 @@ function validate ({ username, password }) {
   }
   return errors
 }
-
-// const validate = ({ username, password }) => {
-//   const errors = {}
-//
-//   if (!username) {
-//     errors.username = 'Required'
-//   } else if (username.length < usernameConfig.length) {
-//     errors.username = `Username must be at least ${usernameConfig.length} characters`
-//   }
-//
-//   if (!password) {
-//     errors.password = 'Required'
-//   } else if (password.length < passwordConfig.length) {
-//     errors.password = `Password must have al lest ${passwordConfig.length} characters`
-//   }
-//   return errors
-// }
 
 const formOptions = {
   form: 'login',
