@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link, IndexLink } from 'react-router'
 
-function MainToolBar () {
+import LogInAndOut from '../login/LogInAndOut'
+
+function MainToolBar (props) {
   return (
     <div>
       <nav className="navbar navbar-default">
@@ -29,6 +31,7 @@ function MainToolBar () {
                 <Link to="/about">About</Link>
               </li>
             </ul>
+            <LogInAndOut />
           </div>
         </div>
       </nav>
