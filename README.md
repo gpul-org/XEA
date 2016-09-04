@@ -1,31 +1,29 @@
+**WARNING: *This repository is not actively maintained, and this
+  project is currently split on two different repositories: one for
+  [xea-core][xea-core] and the other one for [xea-web][xea-web]. Please, refer to those
+  repositories instead.***
+
 XEA
 ===
 
 Event and Activity Management system.
 
 
-Usage
-=====
+Library Repositories
+====================
 
-This repository contains both the core API Django REST Framework-based
-project and the frontend React web app.
+The main repositories from which this one gets built are:
 
-Django REST Framework subproject
---------------------------------
+* [xea-core][xea-core]
+* [xea-web][xea-web]
 
-The DRF subproject is available at xea-core and has a `manage.py` file
-as any Django application. Please refer to its own README file for
-further instructions.
+  xea-core: https://github.com/gpul-org/xea-core
+  xea-web: https://github.com/gpul-org/xea-web
 
+Contributing
+============
 
-React subproject
-----------------
+This repository is not currently open to external contributions.
+Instead, please refer to the former repositories if you want to
+contribute to the project.
 
-~To be filled~
-
-
-Usage with Docker
-=================
-
-~ To be filled (but it's probably a good idea to have a
-docker-compose.yml at some point) ~
