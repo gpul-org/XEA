@@ -1,7 +1,6 @@
 **WARNING: *This repository is not actively maintained, and this
   project is currently split on two different repositories: one for
-  [xea-core][xea-core] and the other one for [xea-web][xea-web]. Please, refer to those
-  repositories instead.***
+  [xea-core](https://github.com/gpul-org/xea-core) and the other one for [xea-web](https://github.com/gpul-org/xea-web). Please, refer to those repositories instead.***
 
 XEA
 ===
@@ -14,11 +13,8 @@ Library Repositories
 
 The main repositories from which this one gets built are:
 
-* [xea-core][xea-core]
-* [xea-web][xea-web]
-
-  xea-core: https://github.com/gpul-org/xea-core
-  xea-web: https://github.com/gpul-org/xea-web
+* [xea-core](https://github.com/gpul-org/xea-core)
+* [xea-web](https://github.com/gpul-org/xea-web)
 
 Contributing
 ============
