@@ -7,6 +7,9 @@ XEA
 
 Event and Activity Management system.
 
+[Roadmap](https://github.com/gpul-org/XEA/wiki/Roadmap)
+=========
+In this repository you can find [XEA user stories](https://github.com/gpul-org/XEA/projects) which are split in different tasks in **core** and **web** repositories. 
 
 Library Repositories
 ====================
